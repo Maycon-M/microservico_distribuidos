@@ -1,12 +1,18 @@
 from sqlalchemy.orm import Session
 from sqlalchemy import select
+from src.domain.users import UserCreate
 from src.interfaces.repositories.user_repo_interface import UserRepoInterface
 from src.models.entities.user import User
 
 class UserRepo(UserRepoInterface):
     
-    def create(self, db: Session, new_user: User) -> User:
+    def create(self, db: Session, user_params: UserCreate) -> User:
         try:
+            new_user = User(
+                name=user_params.name,
+                email=user_params.email,
+                timezone=user_params.timezone,
+            )
             db.add(new_user)
             db.flush()
             db.refresh(new_user)

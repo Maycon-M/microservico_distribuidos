@@ -1,11 +1,12 @@
 from abc import ABC, abstractmethod
 from sqlalchemy.orm import Session
+from src.domain.medicines import MedicineCreate
 from src.models.entities.medicine import Medicine
 
 class MedicineRepoInterface(ABC):
     
     @abstractmethod
-    def create(self, db: Session, new_medicine: Medicine) -> Medicine:
+    def create(self, db: Session,  medicine_params: MedicineCreate) -> Medicine:
         raise NotImplementedError
     
     @abstractmethod
