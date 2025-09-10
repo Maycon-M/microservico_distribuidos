@@ -26,6 +26,8 @@ app.add_middleware(
 
 @app.middleware(middleware_type="https")
 async def log_requests(request: Request, call_next):
+    if request.url.path == "/health":
+        return await call_next(request)
     logger.info("Recebendo requisição: %s %s", request.method, request.url.path)
     try:
         response = await call_next(request)
@@ -43,7 +45,7 @@ app.include_router(reminders_router)
 
 @app.get("/health", tags=["Health"], summary="Health Check")
 def health():
-    logger.info("Health check endpoint called")
+    logger.debug("Health check endpoint called")
     return {"status": "ok"}
 
 @app.get("/", include_in_schema=False)
