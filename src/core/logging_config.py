@@ -2,8 +2,16 @@ import os
 import sys
 import json
 import logging
-from typing import Any, Mapping
+from typing import Any, Mapping, Optional
+from contextvars import ContextVar
 
+_request_id_ctx: ContextVar[Optional[str]] = ContextVar("_request_id", default=None)
+
+def set_request_id(value: Optional[str]) -> None:
+    _request_id_ctx.set(value)
+
+def get_request_id() -> Optional[str]:
+    return _request_id_ctx.get()
 
 class JsonFormatter(logging.Formatter):
     """
